@@ -100,7 +100,7 @@ function handleClick(event) {
         setOfThreeImages.removeEventListener('click', handleClick);
 
         // Show results on page
-
+		
     }
     
 	console.table(allImages);
