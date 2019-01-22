@@ -6,14 +6,15 @@ var imageOne = document.getElementById('img-one');
 var imageTwo = document.getElementById('img-two');
 var imageThree = document.getElementById('img-three');
 var arrayOfPicsToDisplay = [imageOne, imageTwo, imageThree];
-var setOfThreeImages = document.getElementById('image-list'); 
+var setOfThreeImages = document.getElementById('image-list'); // Access DOM
+var totalClicks = 0;
 
 // Constructor function
 function ProductImage(imageName) {
 	this.imageName = imageName;
 	this.filepath = `img/${imageName}.jpg` // Need to handle other file exts
 	this.views = 0;
-	this.clicks = [];
+	this.clicks = 0; // Tracks number of clicks/votes for a given image
 	allImages.push(this);
 }
 
@@ -39,62 +40,69 @@ new ProductImage('usb');
 new ProductImage('water-can');
 new ProductImage('wine-glass');
 
-// Function to show random images
-function showRandomImages() {
-	var randNumsInThisSet = []; // Array to store random nums already used in set
-	for (var i = 0; i < arrayOfPicsToDisplay.length; i++) {
-		var random = Math.floor(Math.random() * allImages.length); // Generate random number
-		console.log(`Variable "random" is ${random}`)
-		console.log(`randNumsInThisSet: ${randNumsInThisSet}`);
-		// while (randNumsInThisSet.length < 3) { // Could instead count up to arrayOfPicsToDisplay.length?
-			if (randNumsInThisSet.indexOf(random) === -1) {
-				console.log('Result of if test:', randNumsInThisSet.indexOf(random));
-				arrayOfPicsToDisplay[i].src = allImages[random].filepath;
-				arrayOfPicsToDisplay[i].alt = allImages[random].imageName;
-				arrayOfPicsToDisplay[i].title = allImages[random].imageName;
-				randNumsInThisSet.push(random); // Or try unshift()	
-				console.log(`"randNumsInThisSet" contains: ${randNumsInThisSet}`)
-				allImages[random].views++;
-			} else { 
-				console.log('Result of else test:', randNumsInThisSet.indexOf(random));
-				// while (random === randNumsInThisSet[0] || random === randNumsInThisSet[1]) {
-				while (randNumsInThisSet.indexOf(random) !== -1) {
-					random = Math.floor(Math.random() * allImages.length);
-					console.log(`Variable "random" is now ${random}`);
-				}
-			}
-		// }
+// Define global random arrays
+var currentRandomArray = [];
+var prevRandomArray = [];
+
+// Function to generate random number (doesn't return anything but outputs to global arrays)
+function getRandomNumber() {
+	prevRandomArray = currentRandomArray;
+	currentRandomArray = [];
+	while (currentRandomArray.length < arrayOfPicsToDisplay.length) {
+		var random = Math.floor(Math.random() * allImages.length);
+		
+		if (!currentRandomArray.includes(random) && !prevRandomArray.includes(random)) {
+			currentRandomArray.push(random);
+		} else {
+			console.log(`Duplicate found: ${random}`);
+		}
 	}
-	
-	// ALTERNATE APPROACH #2: ASSIGN THE 3 IMAGES' ATTRS SEPARATELY 
-	// imageOne.src = allImages[random].filepath;
-	// imageOne.alt = allImages[random].imageName;
-	// imageOne.title = allImages[random].imageName;
-	// imageTwo.src = 
+	console.log(`currentRandomArray is ${currentRandomArray}`);
+	console.log(`prevRandomArray is ${prevRandomArray}`);
+}
 
-	// ALTERNATE SOLUTION USING UL ELEMENTS BELOW
-	// setOfThreeImages. = allImages[random].filepath;
-	// setOfThreeImages. = allImages[random].imageName;
-	// setOfThreeImages. = allImages[random].imageName;
-
-    // Logic to prevent displaying of duplicate images in set of three
-    
-    // Logic to prevent display of any image twice in consecutive image sets
+// Separate function to render set of 3 images
+function showSetOfThreeImages() {
+    getRandomNumber(); 
+    for (var i = 0; i < arrayOfPicsToDisplay.length; i++) {
+        arrayOfPicsToDisplay[i].src = allImages[currentRandomArray[i]].filepath;
+        arrayOfPicsToDisplay[i].alt = allImages[currentRandomArray[i]].imageName;
+        arrayOfPicsToDisplay[i].title = allImages[currentRandomArray[i]].imageName;
+		allImages[currentRandomArray[i]].views++;
+    }   
 }
 
 // Call function to show first set of 3 random images
-showRandomImages();
+showSetOfThreeImages();
 
 // Event listener
 setOfThreeImages.addEventListener('click', handleClick);
 
 // Event handler
 function handleClick(event) {
-	console.log(event.target);
-	showRandomImages;
-	// Validate user input
+    console.log(event.target.alt);
+    
+    // Validate user input
+        // Tell user to click a picture if they clicked in wrong place?
+
+    // Click counter
+    for (var i = 0; i < allImages.length; i++) {
+		console.log('for loop entered');
+		if (event.target.alt === allImages[i].imageName) {
+            console.log('was clicked', event.target.alt);
+            allImages[i].clicks++;
+        }
+    }
+	totalClicks++;
 	
+    // Stop event listener after 25 clicks
+    if (totalClicks === 25) {
+        setOfThreeImages.removeEventListener('click', handleClick);
+
+        // Show results on page
+
+    }
+    
+	console.table(allImages);
+	showSetOfThreeImages();
 }
-
-
-// Render results to HTML list
