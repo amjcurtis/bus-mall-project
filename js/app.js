@@ -17,6 +17,9 @@ var prevRandomArray = [];
 var voteChart;
 var chartDrawn = false; // Need for updating chart if we want to do that
 
+// Check whether local storage already has content
+
+
 // Constructor function
 function ProductImage(imageName) {
 	this.imageName = imageName;
@@ -61,8 +64,6 @@ function getRandomNumber() {
 			console.log(`Duplicate found: ${random}`);
 		}
 	}
-	console.log(`currentRandomArray is ${currentRandomArray}`);
-	console.log(`prevRandomArray is ${prevRandomArray}`);
 }
 
 // Separate function to render set of 3 images
@@ -85,7 +86,7 @@ function showResultsAsList() {
 		// Add list of votes and percentages to DOM
 		var listOfResults = document.getElementById('list-results');
 		var liEl = document.createElement('li');
-		liEl.textContent = `Product "${allImages[i].imageName}"	 was shown ${allImages[i].views} times and got ${allImages[i].clicks} vote(s). So it was selected ${percentage} percent of the time when it was shown.`;
+		liEl.textContent = `Product "${allImages[i].imageName}" was shown ${allImages[i].views} times and got ${allImages[i].clicks} vote(s). So it was selected ${percentage} percent of the time when it was shown.`;
 		listOfResults.appendChild(liEl);
 	}
 }
@@ -144,6 +145,12 @@ function handleClick(event) {
 		// Call function that writes list of voting results and percentages to the page
 		showResultsAsList();
 		console.table(allImages);
+
+		// Store in local storage
+		localStorage.clear(); // Clear local storage before setting fresh content
+		var productsStringified = JSON.stringify(allImages);
+		localStorage.setItem('productsStored', productsStringified);
+		console.log(`Local storage now contains: ${localStorage.getItem('productsStored')}`);
     }    
 	showSetOfThreeImages();
 }
