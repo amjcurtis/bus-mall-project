@@ -12,9 +12,9 @@ var totalClicks = 0;
 // Constructor function
 function ProductImage(imageName) {
 	this.imageName = imageName;
-	this.filepath = `img/${imageName}.jpg` // Need to handle other file exts
+	this.filepath = `img/${imageName}.jpg` // Better way to handle other image types/exts?
 	this.views = 0;
-	this.clicks = 0; // Tracks number of clicks/votes for a given image
+	this.clicks = 0; 
 	allImages.push(this);
 }
 
@@ -100,7 +100,18 @@ function handleClick(event) {
         setOfThreeImages.removeEventListener('click', handleClick);
 
         // Show results on page
-		
+		for (var i = 0; i < allImages.length; i++) {
+			
+			// Calc percentage
+			var percentage = Math.floor((allImages[i].clicks / allImages[i].views) * 100);
+			
+			// Add list to DOM
+			var listOfResults = document.getElementById('list-results');
+			var liEl = document.createElement('li');
+			liEl.textContent = `Product "${allImages[i].imageName}"	 was shown ${allImages[i].views} times and got ${allImages[i].clicks} vote(s). So it was selected ${percentage} percent of the time when it was shown.`;
+			console.log(`liEl.textContent is ${liEl.textContent}`)
+			listOfResults.appendChild(liEl);
+		}
     }
     
 	console.table(allImages);
