@@ -6,13 +6,16 @@ var imageOne = document.getElementById('img-one');
 var imageTwo = document.getElementById('img-two');
 var imageThree = document.getElementById('img-three');
 var arrayOfPicsToDisplay = [imageOne, imageTwo, imageThree];
-var setOfThreeImages = document.getElementById('image-list');
+var setOfThreeImages = document.getElementById('image-container');
 var totalClicks = 0;
+
+// Global random arrays
+var currentRandomArray = [];
+var prevRandomArray = [];
 
 // Chart variables
 var voteChart;
 var chartDrawn = false; // Need for updating chart if we want to do that
-
 
 // Constructor function
 function ProductImage(imageName) {
@@ -45,10 +48,6 @@ new ProductImage('usb');
 new ProductImage('water-can');
 new ProductImage('wine-glass');
 
-// Define global random arrays
-var currentRandomArray = [];
-var prevRandomArray = [];
-
 // Function to generate random number (doesn't return anything but outputs to global arrays)
 function getRandomNumber() {
 	prevRandomArray = currentRandomArray;
@@ -77,12 +76,6 @@ function showSetOfThreeImages() {
     }   
 }
 
-// Call function to show first set of 3 random images
-showSetOfThreeImages();
-
-// Event listener
-setOfThreeImages.addEventListener('click', handleClick);
-
 // Function to show voting results as list
 function showResultsAsList() {
 	for (var i = 0; i < allImages.length; i++) {
@@ -93,7 +86,6 @@ function showResultsAsList() {
 		var listOfResults = document.getElementById('list-results');
 		var liEl = document.createElement('li');
 		liEl.textContent = `Product "${allImages[i].imageName}"	 was shown ${allImages[i].views} times and got ${allImages[i].clicks} vote(s). So it was selected ${percentage} percent of the time when it was shown.`;
-		console.log(`liEl.textContent is ${liEl.textContent}`)
 		listOfResults.appendChild(liEl);
 	}
 }
@@ -127,7 +119,6 @@ function drawChart() {
 	chartDrawn = true;
 }
 
-
 // Event handler
 function handleClick(event) {
 
@@ -142,14 +133,23 @@ function handleClick(event) {
     // Stop event listener after 25 clicks
     if (totalClicks === 25) {
         setOfThreeImages.removeEventListener('click', handleClick);
-		
+	
+		// if (event.target.id === 'image-container') {
+		// 	return alert('Click on an image!');
+		// }	
+
 		// CALL FUNCTION TO CREATE TABLE TO REPLACE LIST OF RESULTS/VOTES
 
 
 		// Call function that writes list of voting results and percentages to the page
 		showResultsAsList();
-    }
-    
-	console.table(allImages);
+		console.table(allImages);
+    }    
 	showSetOfThreeImages();
 }
+
+// Call function to show first set of 3 random images
+showSetOfThreeImages();
+
+// Event listener
+setOfThreeImages.addEventListener('click', handleClick);
