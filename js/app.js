@@ -18,7 +18,17 @@ var voteChart;
 var chartDrawn = false; // Need for updating chart if we want to do that
 
 // Check whether local storage already has content
+if (localStorage.getItem('productsStored')) {
 
+	// Get data from local storage
+	var productsFromStorage = localStorage.getItem('productsStored');
+	console.log(`productsFromStorage holds: ${productsFromStorage}`);
+
+	// Parse JSON
+	var productsReconstituted = JSON.parse(productsFromStorage);
+	console.log(`productsReconstituted is: ${productsFromStorage}`);
+	allImages = productsReconstituted;
+}
 
 // Constructor function
 function ProductImage(imageName) {
