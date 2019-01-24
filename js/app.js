@@ -2,6 +2,28 @@
 
 // Global variables
 var allImages = []; // Array storing all the image object instances
+var allImageNames = [
+	'bag',
+	'banana',
+	'bathroom',
+	'boots',
+	'breakfast',
+	'bubblegum',
+	'chair',
+	'cthulhu',
+	'dog-duck',
+	'dragon',
+	'pen',
+	'pet-sweep',
+	'scissors',
+	'shark',
+	'sweep',
+	'tauntaun',
+	'unicorn',
+	'usb',
+	'water-can',
+	'wine-glass'
+]; 
 var imageOne = document.getElementById('img-one');
 var imageTwo = document.getElementById('img-two');
 var imageThree = document.getElementById('img-three');
@@ -16,6 +38,7 @@ var prevRandomArray = [];
 // Chart variables
 var voteChart;
 var chartDrawn = false; // Need for updating chart if we want to do that
+var clicksForChart = [];
 
 // Constructor function
 function ProductImage(imageName) {
@@ -99,11 +122,39 @@ function showResultsAsList() {
 	}
 }
 
-// DECLARE 'DATA' VARIABLE (OBJECT) TO HOLD DATA THAT WILL BE INPUT AS PROPERTY OF VOTE CHART IN drawChart() FUNCTION
+// Function to 
+function getClicksForChart() {
+	for (var i = 0; i < allImages.length; i++) {
+		clicksForChart[i] = allImages.clicks;
+	}
+	console.log(`clicksForChart contains: ${clicksForChart}`);
+}
 
+// DECLARE 'DATA' VARIABLE (OBJECT) TO HOLD DATA THAT WILL BE INPUT AS PROPERTY OF VOTE CHART IN drawChart() FUNCTION
+var data = {
+	labels: allImageNames,
+	datasets: [{
+		data: clicksForChart,
+		backgroundColor: [
+			'bisque',
+			'darkgray',
+			'burlywood',
+			'lightblue',
+			'navy'
+		], 
+		hoverBackgroundColor: [
+			'purple',
+			'purple',
+			'purple',
+			'purple',
+			'purple'
+		]
+	}]
+};
 
 // FUNCTION TO DRAW CHART
 function drawChart() {
+	getClicksForChart(); // Call function to populate clicksForChart array with each's ProductImage instance's tally of clicks // Should really be calling this here?
 	var ctx = document.getElementById('vote-chart').getContext('2d');
 	voteChart = new Chart(ctx, {
 		type: 'bar',
@@ -126,6 +177,11 @@ function drawChart() {
 		}
 	});
 	chartDrawn = true;
+}
+
+// FUNCTION TO HIDE CHART // ACTUALLY NEED THIS?
+function hideChart() {
+	document.getElementById('vote-chart').hidden = true;
 }
 
 // Event handler
