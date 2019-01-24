@@ -26,27 +26,38 @@ function ProductImage(imageName) {
 	allImages.push(this);
 }
 
-// Declare instances using constructor
-new ProductImage('bag');
-new ProductImage('banana');
-new ProductImage('bathroom');
-new ProductImage('boots');
-new ProductImage('breakfast');
-new ProductImage('bubblegum');
-new ProductImage('chair');
-new ProductImage('cthulhu');
-new ProductImage('dog-duck');
-new ProductImage('dragon');
-new ProductImage('pen');
-new ProductImage('pet-sweep');
-new ProductImage('scissors');
-new ProductImage('shark');
-new ProductImage('sweep');
-new ProductImage('tauntaun');
-new ProductImage('unicorn');
-new ProductImage('usb');
-new ProductImage('water-can');
-new ProductImage('wine-glass');
+// Check whether local storage already has content
+if (localStorage.productsStored) { // Truthy test for existence of local storage
+	// Get data from local storage
+	var productsFromStorage = localStorage.productsStored;
+	// console.log(`productsFromStorage holds: ${productsFromStorage}`);
+	// Parse JSON
+	productsFromStorage = JSON.parse(productsFromStorage);
+	// console.log(`productsReconstituted is: ${productsFromStorage}`);
+	allImages = productsFromStorage;
+} else {
+	// Declare instances using constructor
+	new ProductImage('bag');
+	new ProductImage('banana');
+	new ProductImage('bathroom');
+	new ProductImage('boots');
+	new ProductImage('breakfast');
+	new ProductImage('bubblegum');
+	new ProductImage('chair');
+	new ProductImage('cthulhu');
+	new ProductImage('dog-duck');
+	new ProductImage('dragon');
+	new ProductImage('pen');
+	new ProductImage('pet-sweep');
+	new ProductImage('scissors');
+	new ProductImage('shark');
+	new ProductImage('sweep');
+	new ProductImage('tauntaun');
+	new ProductImage('unicorn');
+	new ProductImage('usb');
+	new ProductImage('water-can');
+	new ProductImage('wine-glass');
+}
 
 // Function to generate random number (doesn't return anything but outputs to global arrays)
 function getRandomNumber() {
@@ -61,8 +72,6 @@ function getRandomNumber() {
 			console.log(`Duplicate found: ${random}`);
 		}
 	}
-	console.log(`currentRandomArray is ${currentRandomArray}`);
-	console.log(`prevRandomArray is ${prevRandomArray}`);
 }
 
 // Separate function to render set of 3 images
@@ -85,7 +94,7 @@ function showResultsAsList() {
 		// Add list of votes and percentages to DOM
 		var listOfResults = document.getElementById('list-results');
 		var liEl = document.createElement('li');
-		liEl.textContent = `Product "${allImages[i].imageName}"	 was shown ${allImages[i].views} times and got ${allImages[i].clicks} vote(s). So it was selected ${percentage} percent of the time when it was shown.`;
+		liEl.textContent = `Product "${allImages[i].imageName}" was shown ${allImages[i].views} times and got ${allImages[i].clicks} vote(s). So it was selected ${percentage} percent of the time when it was shown.`;
 		listOfResults.appendChild(liEl);
 	}
 }
@@ -144,6 +153,12 @@ function handleClick(event) {
 		// Call function that writes list of voting results and percentages to the page
 		showResultsAsList();
 		console.table(allImages);
+
+		// Store in local storage
+		// localStorage.clear(); // Clear local storage before setting fresh content
+		// var productsStringified = JSON.stringify(allImages);
+		// localStorage.setItem('productsStored', productsStringified);
+		localStorage.productsStored = JSON.stringify(allImages);
     }    
 	showSetOfThreeImages();
 }
