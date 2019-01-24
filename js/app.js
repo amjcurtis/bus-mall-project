@@ -125,7 +125,7 @@ function showResultsAsList() {
 // Function to 
 function getClicksForChart() {
 	for (var i = 0; i < allImages.length; i++) {
-		clicksForChart[i] = allImages.clicks;
+		clicksForChart[i] = allImages[i].clicks;
 	}
 	console.log(`clicksForChart contains: ${clicksForChart}`);
 }
@@ -134,6 +134,7 @@ function getClicksForChart() {
 var data = {
 	labels: allImageNames,
 	datasets: [{
+		label: 'Vote Chart',
 		data: clicksForChart,
 		backgroundColor: [
 			'bisque',
@@ -169,9 +170,7 @@ function drawChart() {
 		scales: {
 			yAxes: [{
 				ticks: {
-					max: 10,
-					min: 0,
-					stepSize: 1.0
+					beginAtZero: true
 				}
 			}]
 		}
@@ -204,7 +203,8 @@ function handleClick(event) {
 		// }	
 
 		// CALL FUNCTION TO CREATE TABLE TO REPLACE LIST OF RESULTS/VOTES
-
+		drawChart();
+		console.log('Chart was drawn');
 
 		// Call function that writes list of voting results and percentages to the page
 		showResultsAsList();
