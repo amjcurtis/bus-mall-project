@@ -17,19 +17,6 @@ var prevRandomArray = [];
 var voteChart;
 var chartDrawn = false; // Need for updating chart if we want to do that
 
-// Check whether local storage already has content
-if (localStorage.getItem('productsStored')) {
-
-	// Get data from local storage
-	var productsFromStorage = localStorage.getItem('productsStored');
-	console.log(`productsFromStorage holds: ${productsFromStorage}`);
-
-	// Parse JSON
-	var productsReconstituted = JSON.parse(productsFromStorage);
-	console.log(`productsReconstituted is: ${productsFromStorage}`);
-	allImages = productsReconstituted;
-}
-
 // Constructor function
 function ProductImage(imageName) {
 	this.imageName = imageName;
@@ -39,27 +26,38 @@ function ProductImage(imageName) {
 	allImages.push(this);
 }
 
-// Declare instances using constructor
-new ProductImage('bag');
-new ProductImage('banana');
-new ProductImage('bathroom');
-new ProductImage('boots');
-new ProductImage('breakfast');
-new ProductImage('bubblegum');
-new ProductImage('chair');
-new ProductImage('cthulhu');
-new ProductImage('dog-duck');
-new ProductImage('dragon');
-new ProductImage('pen');
-new ProductImage('pet-sweep');
-new ProductImage('scissors');
-new ProductImage('shark');
-new ProductImage('sweep');
-new ProductImage('tauntaun');
-new ProductImage('unicorn');
-new ProductImage('usb');
-new ProductImage('water-can');
-new ProductImage('wine-glass');
+// Check whether local storage already has content
+if (localStorage.productsStored) { // Truthy test for existence of local storage
+	// Get data from local storage
+	var productsFromStorage = localStorage.productsStored;
+	// console.log(`productsFromStorage holds: ${productsFromStorage}`);
+	// Parse JSON
+	productsFromStorage = JSON.parse(productsFromStorage);
+	// console.log(`productsReconstituted is: ${productsFromStorage}`);
+	allImages = productsFromStorage;
+} else {
+	// Declare instances using constructor
+	new ProductImage('bag');
+	new ProductImage('banana');
+	new ProductImage('bathroom');
+	new ProductImage('boots');
+	new ProductImage('breakfast');
+	new ProductImage('bubblegum');
+	new ProductImage('chair');
+	new ProductImage('cthulhu');
+	new ProductImage('dog-duck');
+	new ProductImage('dragon');
+	new ProductImage('pen');
+	new ProductImage('pet-sweep');
+	new ProductImage('scissors');
+	new ProductImage('shark');
+	new ProductImage('sweep');
+	new ProductImage('tauntaun');
+	new ProductImage('unicorn');
+	new ProductImage('usb');
+	new ProductImage('water-can');
+	new ProductImage('wine-glass');
+}
 
 // Function to generate random number (doesn't return anything but outputs to global arrays)
 function getRandomNumber() {
@@ -157,10 +155,10 @@ function handleClick(event) {
 		console.table(allImages);
 
 		// Store in local storage
-		localStorage.clear(); // Clear local storage before setting fresh content
-		var productsStringified = JSON.stringify(allImages);
-		localStorage.setItem('productsStored', productsStringified);
-		console.log(`Local storage now contains: ${localStorage.getItem('productsStored')}`);
+		// localStorage.clear(); // Clear local storage before setting fresh content
+		// var productsStringified = JSON.stringify(allImages);
+		// localStorage.setItem('productsStored', productsStringified);
+		localStorage.productsStored = JSON.stringify(allImages);
     }    
 	showSetOfThreeImages();
 }
