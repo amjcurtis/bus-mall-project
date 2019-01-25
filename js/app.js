@@ -36,7 +36,7 @@ var currentRandomArray = [];
 var prevRandomArray = [];
 
 // Chart variables
-var voteChart;
+var voteChart; // Value assigned later in drawChart() function
 var chartDrawn = false; // Need for updating chart if we want to do that
 var clicksForChart = [];
 
@@ -53,33 +53,14 @@ function ProductImage(imageName) {
 if (localStorage.productsStored) { // Truthy test for existence of local storage
 	// Get data from local storage
 	var productsFromStorage = localStorage.productsStored;
-	// console.log(`productsFromStorage holds: ${productsFromStorage}`);
 	// Parse JSON
 	productsFromStorage = JSON.parse(productsFromStorage);
-	// console.log(`productsReconstituted is: ${productsFromStorage}`);
 	allImages = productsFromStorage;
 } else {
-	// Declare instances using constructor
-	new ProductImage('bag');
-	new ProductImage('banana');
-	new ProductImage('bathroom');
-	new ProductImage('boots');
-	new ProductImage('breakfast');
-	new ProductImage('bubblegum');
-	new ProductImage('chair');
-	new ProductImage('cthulhu');
-	new ProductImage('dog-duck');
-	new ProductImage('dragon');
-	new ProductImage('pen');
-	new ProductImage('pet-sweep');
-	new ProductImage('scissors');
-	new ProductImage('shark');
-	new ProductImage('sweep');
-	new ProductImage('tauntaun');
-	new ProductImage('unicorn');
-	new ProductImage('usb');
-	new ProductImage('water-can');
-	new ProductImage('wine-glass');
+	// Spin up object instances
+	for (var i = 0; i < allImageNames.length; i++) {
+		new ProductImage(allImageNames[i]);
+	}
 }
 
 // Function to generate random number (doesn't return anything but outputs to global arrays)
