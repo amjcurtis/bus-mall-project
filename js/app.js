@@ -36,7 +36,7 @@ var currentRandomArray = [];
 var prevRandomArray = [];
 
 // Chart variables
-var voteChart;
+var voteChart; // Value assigned later in drawChart() function
 var chartDrawn = false; // Need for updating chart if we want to do that
 var clicksForChart = [];
 
@@ -53,33 +53,14 @@ function ProductImage(imageName) {
 if (localStorage.productsStored) { // Truthy test for existence of local storage
 	// Get data from local storage
 	var productsFromStorage = localStorage.productsStored;
-	// console.log(`productsFromStorage holds: ${productsFromStorage}`);
 	// Parse JSON
 	productsFromStorage = JSON.parse(productsFromStorage);
-	// console.log(`productsReconstituted is: ${productsFromStorage}`);
 	allImages = productsFromStorage;
 } else {
-	// Declare instances using constructor
-	new ProductImage('bag');
-	new ProductImage('banana');
-	new ProductImage('bathroom');
-	new ProductImage('boots');
-	new ProductImage('breakfast');
-	new ProductImage('bubblegum');
-	new ProductImage('chair');
-	new ProductImage('cthulhu');
-	new ProductImage('dog-duck');
-	new ProductImage('dragon');
-	new ProductImage('pen');
-	new ProductImage('pet-sweep');
-	new ProductImage('scissors');
-	new ProductImage('shark');
-	new ProductImage('sweep');
-	new ProductImage('tauntaun');
-	new ProductImage('unicorn');
-	new ProductImage('usb');
-	new ProductImage('water-can');
-	new ProductImage('wine-glass');
+	// Spin up object instances
+	for (var i = 0; i < allImageNames.length; i++) {
+		new ProductImage(allImageNames[i]);
+	}
 }
 
 // Function to generate random number (doesn't return anything but outputs to global arrays)
@@ -125,7 +106,7 @@ function showResultsAsList() {
 // Function to 
 function getClicksForChart() {
 	for (var i = 0; i < allImages.length; i++) {
-		clicksForChart[i] = allImages.clicks;
+		clicksForChart[i] = allImages[i].clicks;
 	}
 	console.log(`clicksForChart contains: ${clicksForChart}`);
 }
@@ -134,6 +115,7 @@ function getClicksForChart() {
 var data = {
 	labels: allImageNames,
 	datasets: [{
+		label: 'Vote Chart',
 		data: clicksForChart,
 		backgroundColor: [
 			'bisque',
@@ -169,9 +151,7 @@ function drawChart() {
 		scales: {
 			yAxes: [{
 				ticks: {
-					max: 10,
-					min: 0,
-					stepSize: 1.0
+					beginAtZero: true
 				}
 			}]
 		}
@@ -204,7 +184,8 @@ function handleClick(event) {
 		// }	
 
 		// CALL FUNCTION TO CREATE TABLE TO REPLACE LIST OF RESULTS/VOTES
-
+		drawChart();
+		console.log('Chart was drawn');
 
 		// Call function that writes list of voting results and percentages to the page
 		showResultsAsList();
