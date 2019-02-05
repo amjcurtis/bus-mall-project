@@ -29,6 +29,7 @@ var allImageNames = [
 // Global random arrays
 var currentRandomArray = [];
 var prevRandomArray = [];
+var totalClicks = 0;
 
 // Variables for accessing DOM
 var imageOne = document.getElementById('img-one');
@@ -36,7 +37,6 @@ var imageTwo = document.getElementById('img-two');
 var imageThree = document.getElementById('img-three');
 var arrayOfPicsToDisplay = [imageOne, imageTwo, imageThree];
 var setOfThreeImages = document.getElementById('image-container');
-var totalClicks = 0;
 
 // Chart variables
 var voteChart;   // Value assigned later in drawChart() function
@@ -102,21 +102,7 @@ function showSetOfThreeImages() {
   }
 }
 
-// Function to show voting results as list
-function showResultsAsList() {
-  for (var i = 0; i < allImages.length; i++) {
-    // Calc percentage of times that a given image was clicked when shown
-    var percentage = Math.floor((allImages[i].clicks / allImages[i].views) * 100);
-
-    // Add list of votes and percentages to DOM
-    var listOfResults = document.getElementById('list-results');
-    var liEl = document.createElement('li');
-    liEl.textContent = `Product "${allImages[i].imageName}" was shown ${allImages[i].views} times and got ${allImages[i].clicks} vote(s). So it was selected ${percentage} percent of the time when it was shown.`;
-    listOfResults.appendChild(liEl);
-  }
-}
-
-// Function to 
+// Function to tally clicks on each image to display on chart
 function getClicksForChart() {
   for (var i = 0; i < allImages.length; i++) {
     clicksForChart[i] = allImages[i].clicks;
